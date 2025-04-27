@@ -1,0 +1,39 @@
+﻿@model IEnumerable<WebApplication1.Models.Aluno>
+
+@{
+    ViewBag.Title = "Listar Alunos";
+}
+
+<h2>Listar Alunos</h2>
+
+<p>
+    @Html.ActionLink("Criar Novo", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RA)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RA)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = Model.ToList<WebApplication1.Models.Aluno>().IndexOf(item) }) |
+            @Html.ActionLink("Exibir Detalhes", "Exibir", new {  id=Model.ToList<WebApplication1.Models.Aluno>().IndexOf(item)  }) |
+            @Html.ActionLink("Excluir", "Delete", new { id = Model.ToList<WebApplication1.Models.Aluno>().IndexOf(item) })
+        </td>
+    </tr>
+}
+
+</table>

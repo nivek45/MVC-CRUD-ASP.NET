@@ -1,0 +1,56 @@
+﻿@model WebApplication1.Models.Carro
+
+@{
+    ViewBag.Title = "Deletar";
+}
+
+<h2>Deletar Carro</h2>
+
+<h3>Você tem certeza que deseja excluir?</h3>
+<div>
+    <h4>Carro</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Placa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ano)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ano)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataFabricacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataFabricacao)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> 
+            @Html.ActionLink("Voltar", "Listar", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+</div>

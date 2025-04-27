@@ -1,0 +1,82 @@
+﻿@model IEnumerable<WebApplication1.Models.Celular>
+
+@{
+    ViewBag.Title = "Listar Celulares";
+}
+
+<h2>Listar Celulares</h2>
+
+<p>
+    @Html.ActionLink("Novo Celular", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Exportar PDF", "DownloadPdf", null, new { @class = "btn btn-danger" })
+    @Html.ActionLink("Exportar Excel", "DownloadExcel", null, new { @class = "btn btn-success" })
+</p>
+
+<table id="tabelaCelulares" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Marca</th>
+            <th>Numero</th>
+            <th>Novo</th>
+            <th>Data de Compra</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var celular in Model)
+        {
+            <tr>
+                <td>@celular.Marca</td>
+                <td>@celular.NumeroFormatado</td>
+                <td>@(celular.Novo ? "Sim" : "Não")</td>
+                <td>@celular.DataCompra.ToShortDateString()</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = celular.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Visualizar", "Exibir", new { id = celular.Id }, new { @class = "btn btn-info btn-sm" })
+                    <button class="btn btn-danger btn-sm" onclick="excluirCelular(@celular.Id)">Excluir</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" />
+
+    <script>
+        $(document).ready(function () {
+            var tabela = $('#tabelaCelulares').DataTable();
+
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var inputSearch = $('.dataTables_filter input').val().toLowerCase();
+                    var numero = data[0].toLowerCase();
+
+                    if (inputSearch === '') {
+                        return true;
+                    }
+
+                    return numero.startsWith(inputSearch);
+                }
+            );
+
+            $('.dataTables_filter input').unbind().bind('keyup', function () {
+                tabela.draw();
+            });
+        });
+
+        function excluirCelular(id) {
+            if (confirm('Deseja realmente excluir este celular?')) {
+                $.post('@Url.Action("DeleteAjax")', { id: id }, function (data) {
+                    if (data.sucesso) {
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir celular.");
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,48 @@
+﻿@model WebApplication1.Models.Carro
+
+@{
+    ViewBag.Title = "Exibir";
+}
+
+<h2>Exibir Carro</h2>
+
+<div>
+    <h4>Carro</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Placa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ano)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ano)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataFabricacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataFabricacao)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Voltar", "Listar", null, new { @class = "btn btn-secondary" })
+</p>

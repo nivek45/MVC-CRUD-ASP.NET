@@ -1,0 +1,84 @@
+﻿@model List<WebApplication1.Models.Carro>
+
+@{
+    ViewBag.Title = "Lista de Carros";
+}
+
+<h2>Lista de Carros</h2>
+
+<p>
+    @Html.ActionLink("Novo Carro", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Exportar PDF", "GerarPdf", null, new { @class = "btn btn-danger" })
+    @Html.ActionLink("Exportar Excel", "GerarExcel", null, new { @class = "btn btn-success" })
+</p>
+
+<table id="tabelaCarros" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Placa</th>
+            <th>Ano</th>
+            <th>Cor</th>
+            <th>Data de Fabricação</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var carro in Model)
+        {
+            <tr>
+                <td>@carro.Placa</td>
+                <td>@carro.Ano</td>
+                <td>@carro.Cor</td>
+                <td>@carro.DataFabricacao.ToShortDateString()</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = carro.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Visualizar", "Exibir", new { id = carro.Id }, new { @class = "btn btn-info btn-sm" })
+                    <button class="btn btn-danger btn-sm" onclick="excluirCarro(@carro.Id)">Excluir</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" />
+
+    <script>
+        $(document).ready(function () {
+            var tabela = $('#tabelaCarros').DataTable();
+
+            // Adiciona o filtro customizado
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var inputSearch = $('.dataTables_filter input').val().toLowerCase().trim();
+                    var placa = data[0].toLowerCase().trim(); // Somente a primeira coluna (placa)
+
+                    if (inputSearch === '') {
+                        return true; // Se nada digitado, mostra tudo
+                    }
+
+                    return placa.includes(inputSearch); // Verifica se contém o texto digitado em qualquer parte
+                }
+            );
+
+            // Atualiza o filtro conforme o usuário digita
+            $('.dataTables_filter input').unbind().bind('keyup', function () {
+                tabela.draw();
+            });
+        });
+
+        function excluirCarro(id) {
+            if (confirm('Deseja realmente excluir este carro?')) {
+                $.post('@Url.Action("DeleteAjax")', { id: id }, function (data) {
+                    if (data.sucesso) {
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir carro.");
+                    }
+                });
+            }
+        }
+    </script>
+}

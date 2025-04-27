@@ -1,0 +1,78 @@
+﻿@model List<WebApplication1.Models.Evento>
+
+@{
+    ViewBag.Title = "Lista de Eventos";
+}
+
+<h2>Lista de Eventos</h2>
+
+<p>
+    @Html.ActionLink("Novo Evento", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Exportar PDF", "DownloadPdf", null, new { @class = "btn btn-danger" })
+    @Html.ActionLink("Exportar Excel", "DownloadExcel", null, new { @class = "btn btn-success" })
+</p>
+
+<table id="tabelaEventos" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Local</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var evento in Model)
+        {
+            <tr>
+                <td>@evento.Local</td>
+                <td>@evento.Data.ToShortDateString()</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = evento.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Visualizar", "Exibir", new { id = evento.Id }, new { @class = "btn btn-info btn-sm" })
+                    <button class="btn btn-danger btn-sm" onclick="excluirEvento(@evento.Id)">Excluir</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" />
+
+    <script>
+        $(document).ready(function () {
+            var tabela = $('#tabelaEventos').DataTable();
+
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var inputSearch = $('.dataTables_filter input').val().toLowerCase();
+                    var local = data[0].toLowerCase();
+
+                    if (inputSearch === '') {
+                        return true;
+                    }
+
+                    return local.startsWith(inputSearch);
+                }
+            );
+
+            $('.dataTables_filter input').unbind().bind('keyup', function () {
+                tabela.draw();
+            });
+        });
+
+        function excluirEvento(id) {
+            if (confirm('Deseja realmente excluir este evento?')) {
+                $.post('@Url.Action("DeleteAjax", "Evento")', { id: id }, function (data) {
+                    if (data.sucesso) {
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir evento.");
+                    }
+                });
+            }
+        }
+    </script>
+}

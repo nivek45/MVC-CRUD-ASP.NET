@@ -1,0 +1,80 @@
+﻿@model List<WebApplication1.Models.Aluno>
+@{
+    ViewBag.Title = "Lista de Alunos";
+}
+
+
+<h2>Lista de Alunos</h2>
+
+<p>
+    @Html.ActionLink("Novo Aluno", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Exportar PDF", "DownloadPdf", null, new { @class = "btn btn-danger" })
+    @Html.ActionLink("Exportar Excel", "DownloadExcel", null, new { @class = "btn btn-success" })
+</p>
+
+<table id="tabelaAlunos" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Data de Nascimento</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aluno in Model)
+        {
+            <tr>
+                <td>@aluno.Nome</td>
+                <td>@aluno.Email</td>
+                <td>@aluno.DataNascimento.ToShortDateString()</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = aluno.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Visualizar", "Exibir", new { id = aluno.Id }, new { @class = "btn btn-info btn-sm" })
+                    <button class="btn btn-danger btn-sm" onclick="excluirAluno(@aluno.Id)">Excluir</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" />
+
+    <script>
+        $(document).ready(function () {
+            var tabela = $('#tabelaAlunos').DataTable();
+
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var inputSearch = $('.dataTables_filter input').val().toLowerCase(); 
+                    var nome = data[0].toLowerCase(); 
+
+                    if (inputSearch === '') {
+                        return true;
+                    }
+
+                    return nome.startsWith(inputSearch);
+                }
+            );
+
+            $('.dataTables_filter input').unbind().bind('keyup', function () {
+                tabela.draw();
+            });
+        });
+
+        function excluirAluno(id) {
+            if (confirm('Deseja realmente excluir este aluno?')) {
+                $.post('@Url.Action("DeleteAjax")', { id: id }, function (data) {
+                    if (data.sucesso) {
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir aluno.");
+                    }
+                });
+            }
+        }
+    </script>
+}

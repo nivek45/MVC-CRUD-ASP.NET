@@ -1,0 +1,40 @@
+﻿@model WebApplication1.Models.Evento
+
+@{
+    ViewBag.Title = "Deletar";
+}
+
+<h2>Deletar Evento</h2>
+
+<h3>Você tem certeza que deseja excluir?</h3>
+<div>
+    <h4>Evento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Local)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Local)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Data)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Data)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> 
+            @Html.ActionLink("Voltar", "Listar", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+</div>
