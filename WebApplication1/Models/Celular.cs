@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,7 +24,6 @@ namespace WebApplication1.Models
         [Display(Name = "Data de Compra")]
         public DateTime DataCompra { get; set; }
 
-        // Métodos auxiliares
         public static void GerarLista(HttpSessionStateBase session)
         {
             if (session["ListaCelular"] == null)
