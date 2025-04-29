@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,10 +22,8 @@ namespace WebApplication1.Controllers
             return View(Session["ListaCarro"] as List<Carro>);
         }
 
-        // Criação de novo carro
         public ActionResult Create() => View(new Carro());
 
-        // Criação do carro (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Carro carro)
@@ -38,10 +36,8 @@ namespace WebApplication1.Controllers
             return View(carro);
         }
 
-        // Edição de carro
         public ActionResult Edit(int id) => View(Carro.Procurar(Session, id));
 
-        // Edição de carro (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Carro carro)
