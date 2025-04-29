@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Aluno
+@model WebApplication1.Models.Aluno
 @{
     ViewBag.Title = "Editar Aluno";
 }
@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.DataNascimento)
-        @Html.TextBoxFor(m => m.DataNascimento, new { @class = "form-control", type = "date" })
+        @Html.TextBoxFor(m => m.DataNascimento, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
         @Html.ValidationMessageFor(m => m.DataNascimento)
     </div>
 
