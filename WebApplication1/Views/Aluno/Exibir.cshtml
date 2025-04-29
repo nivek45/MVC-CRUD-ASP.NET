@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Aluno
+@model WebApplication1.Models.Aluno
 
 @{
     ViewBag.Title = "Exibir";
@@ -19,19 +19,27 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RA)
+            @Html.DisplayNameFor(model => model.Id)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.RA)
+            @Html.DisplayFor(model => model.Id)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Data)
+            @Html.DisplayNameFor(model => model.DataNascimento)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Data)
+            @Html.DisplayFor(model => model.DataNascimento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
         </dd>
 
     </dl>
